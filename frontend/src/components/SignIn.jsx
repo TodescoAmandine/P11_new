@@ -1,66 +1,76 @@
-import React, {useState} from 'react';
-import { NavLink } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-import { loginUser } from '../store/UserSlice';
+import React, { useState } from "react";
 import { useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
 
 const SignIn = () => {
-
-  //states
-  const[email, setEmail] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
+  const [rememberMe, setRememberMe] = useState(false); // Nouvel état pour la case à cocher "Remember me"
+  const navigate = useNavigate();
 
- //redux state
- const {loading, error} = useSelector((state)=>state.user);
-
-const dispatch = useDispatch();
-const navigate = useNavigate();
-  const handleLoginEvent = (e) => {
+  const login = (e) => {
     e.preventDefault();
-    let userCredential={
-      email, password
+
+    const data = {
+      email,
+      password
     }
-    dispatch(loginUser(userCredential)).then((result)=>{
-      if(result.payload){
-        setEmail('');
-        setPassword('');
-        navigate('/userpage');
-      }
-    })
-  }
-  
+
+    console.log(data); 
+
+    if (data.email !== '' && data.password !== '') {
+      fetch("http://localhost:3001/api/v1/user/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      })
+      .then((response) => response.json()) // Convertit la réponse en JSON
+      .then((data) => {
+        console.log(data);
+        if (data.body.token) {
+          const valeurUserToken = JSON.stringify(data.body.token)
+          if (rememberMe) { // Si la case "Remember me" est cochée, utilise localStorage
+            window.localStorage.setItem("userToken", valeurUserToken)
+          } else { // Sinon, utilise sessionStorage
+            window.sessionStorage.setItem("userToken", valeurUserToken)
+          }
+          navigate('/userpage');
+        } else {
+          setErrorMessage("Utilisateur inconnu");
+        }
+      })
+    } else if (data.email === '' && data.password !== '') {
+      setErrorMessage("Merci de renseigner un email");
+    } else if (data.email !== '' && data.password === '') {
+      setErrorMessage("Merci de renseigner un mot de passe");
+    } else {
+      setErrorMessage("Merci de compléter les champs");
+    }
+  };
+
   return (
-      <main className="main bg-dark">
-            <section className="sign-in-content">
+    <main className="main bg-dark">
+      <section className="sign-in-content">
         <i className="fa fa-user-circle sign-in-icon"></i>
         <h1>Sign In</h1>
-        <form onSubmit={handleLoginEvent}>
+        <form>
           <div className="input-wrapper">
-            <label htmlFor="username">Username</label>
-            <input type="text" id="username" value={email} onChange={(e)=>setEmail(e.target.value)}/>
+            <label htmlFor="email">Email</label>
+            <input type="email" id="email" value={email} onChange={(e) => setEmail(e.target.value)} />
           </div>
           <div className="input-wrapper">
             <label htmlFor="password">Password</label>
-            <input type="password" id="password"value={password} onChange={(e)=>setPassword(e.target.value)} />
+            <input type="password" id="password" value={password} onChange={(e) => setPassword(e.target.value)} />
           </div>
           <div className="input-remember">
-            <input type="checkbox" id="remember-me" /><label htmlFor="remember-me">Remember me</label>
+            <input type="checkbox" id="remember-me" checked={rememberMe} onChange={(e) => setRememberMe(e.target.checked)} /><label htmlFor="remember-me">Remember me</label>
           </div>
-          <NavLink to="/userpage" class="sign-in-button">Sign In</NavLink>
-          <button className="sign-in-button">{
-            loading?'Loading...':'Login'
-          }</button> 
-          {error &&(
-            <div className="error-message" role='alert'>
-              {error}
-            </div>
-          
-          )}
+          <button className="sign-in-button" type="submit" onClick={login}>Sign In</button>
+          <p className='error-message' id="error">{errorMessage}</p>
         </form>
       </section>     
-      </main>       
-    );
+    </main>    
+  );
 };
 
 export default SignIn;
