@@ -1,24 +1,21 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import logo from '../assets/images/argentBankLogo-min.webp';
-import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { logout } from './store/authenticationSlice';
 
 
-const MainNav = () => {
-  const navigate = useNavigate();
+const Navigation = () => {
+  const dispatch = useDispatch(); //  useDispatch pour obtenir la fonction dispatch
 
-  const logout = () => {
-    
-    
-    // Supprime le token du localStorage
+  const handleLogout = () => {
+    // Supprime le token du localStorage et du sessionStorage
     window.localStorage.removeItem('userToken');
-    // Supprime le token du sessionStorage
     window.sessionStorage.removeItem('userToken');
-    // Redirige l'utilisateur vers la page de connexion
-    navigate('/login');
+    // Dispatche l'action logout
+    dispatch(logout());
   };
   
-// Vérifie si l'utilisateur est connecté
+// Vérifie si l'utilisateur est connecté avec le token stocké dans le localStorage ou le sessionStorage
 const isLoggedIn = window.localStorage.getItem('userToken') || window.sessionStorage.getItem('userToken');
 
     return (
@@ -27,11 +24,10 @@ const isLoggedIn = window.localStorage.getItem('userToken') || window.sessionSto
           <img src={logo} alt='Argent Bank Logo' className='main-nav-logo-image' />
           <h1 className='sr-only'>Argent Bank</h1>
         </NavLink>
-
-
-        <div>
-        <NavLink to={isLoggedIn ? '/' : '/login'}> {/* Change la route en fonction de l'état de connexion de l'utilisateur */}
-            <i className='fa fa-user-circle'></i>{isLoggedIn ? 'Sign Out' : 'Sign In'} {/* Change le texte en fonction de l'état de connexion de l'utilisateur */}
+        <div onClick={handleLogout} >
+        <NavLink to={isLoggedIn ? '/' : '/login'}> 
+            <i className='fa fa-user-circle'>
+              </i>{isLoggedIn ? 'Sign Out' : 'Sign In'} 
           </NavLink>
         </div>
       </nav>

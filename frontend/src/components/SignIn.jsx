@@ -5,7 +5,7 @@ const SignIn = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
-  const [rememberMe, setRememberMe] = useState(false); // Nouvel état pour la case à cocher "Remember me"
+  const [rememberMe, setRememberMe] = useState(false); // état case à cocher "Remember me"
   const navigate = useNavigate();
 
   const login = (e) => {
@@ -34,6 +34,7 @@ const SignIn = () => {
           } else { // Sinon, utilise sessionStorage
             window.sessionStorage.setItem("userToken", valeurUserToken)
           }
+          dispatch(login(valeurUserToken)); // Dispatche l'action login avec le token comme payload
           navigate('/userpage');
         } else {
           setErrorMessage("Utilisateur inconnu");
