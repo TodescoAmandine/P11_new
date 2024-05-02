@@ -88,7 +88,6 @@ function HeaderUser () {
                           <button className="edit-username-button" onClick={handleSubmitUsername}>Save</button>
                           <button className="edit-username-button" onClick={() => setDisplay(!display)}>Cancel</button>
                       </div>
-                      {errorMessage && <p className="error-message">{errorMessage}</p>}
                   </form>
               </div>
           }
