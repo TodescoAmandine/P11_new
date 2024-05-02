@@ -16,43 +16,41 @@ const SignIn = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-const handleSubmit = async (event) =>{
-  event.preventDefault();
-        
-  if (email === '' || password === '') {
-    setErrorMessage('Les champs Email et mot de passe ne doivent pas être vides');
-    return;
-  }
-  console.log(`Email: ${email}, Password: ${password}`);
-
-        try {
-            const response = await fetch("http://localhost:3001/api/v1/user/login", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({email, password}),
-          });
-
-        if (response.ok) {
-            const data = await response.json();
-
-
-            const token = data.body.token;
-            dispatch(loginSuccess(token));
-            window.sessionStorage.setItem("token", token)
-            if (rememberMe) { // Si la case "Remember me" est cochée, utilise localStorage
-              window.localStorage.setItem("token", token)
-            }
-              navigate('/profile');
- 
-          } else {
-
-            const error = "Utilisateur inconnu"
-                dispatch(loginFailed(error));
-            }
-        } catch (error) {
-            console.error(error);
-        }
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+  
+    if (email === '' || password === '') {
+      setErrorMessage('Les champs Email et mot de passe ne doivent pas être vides');
+      return;
     }
+    console.log(`Email: ${email}, Password: ${password}`);
+  
+    try {
+      const response = await fetch("http://localhost:3001/api/v1/user/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({email, password}),
+      });
+  
+      if (response.ok) {
+        const data = await response.json();
+        const token = data.body.token;
+        dispatch(loginSuccess(token));
+        window.sessionStorage.setItem("token", token)
+        if (rememberMe) { // Si la case "Remember me" est cochée, utilise localStorage
+          window.localStorage.setItem("token", token)
+        }
+        if (token){ // Si le token est valide, redirige vers la page de profil
+          navigate('/profile');
+        } else {
+          const error = "Utilisateur inconnu"
+          dispatch(loginFailed(error));
+        }
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <main className="main bg-dark">

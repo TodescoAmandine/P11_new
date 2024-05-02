@@ -7,10 +7,12 @@ import accountData from '../data/accountdata.json';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { userProfile } from '../redux/actions/actions.user';
+import { useNavigate } from 'react-router-dom'; // Change this line
 
 function User () {
     const token = useSelector((state) => state.auth.token);
     const dispatch = useDispatch();
+    const navigate = useNavigate(); // Change this line
 
     /* Asynchronous function that retrieves user data and updates it with useEffect */
     useEffect(() => {
@@ -52,28 +54,33 @@ function User () {
         }
     }, [dispatch, token]);
 
-
-
+    useEffect(() => {
+        if (!token) {
+          navigate('/login');
+        }
+      }, [token, navigate]);
 
     return (
         <div className='page_account'>
-            <Navigation />
+          <Navigation />
+          {token && (
             <main className='main bg-dark'>
-            <HeaderUser />    
-            {accountData.map((account) => (
+              <HeaderUser />    
+              {accountData.map((account) => (
                 <Account 
-                    key={account.id}
-                    title={account.title}
-                    type={account.type}
-                    accountnumber={account.accountnumber}
-                    amount={account.amount}
-                    description={account.description}
+                  key={account.id}
+                  title={account.title}
+                  type={account.type}
+                  accountnumber={account.accountnumber}
+                  amount={account.amount}
+                  description={account.description}
                 />
-            ))}
+              ))}
             </main>
-            <Footer />
+          )}
+          <Footer />
         </div>
-    );
-};
+      );
+    }
 
 export default User;
