@@ -1,73 +1,79 @@
 import React, { useState } from "react";
 import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { loginSuccess } from '../redux/actions/actions.authen';
+import { loginFailed } from '../redux/actions/actions.authen';
 
 const SignIn = () => {
+  // Déclaration des états
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+
   const [rememberMe, setRememberMe] = useState(false); // état case à cocher "Remember me"
+
+
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
-  const login = (e) => {
-    e.preventDefault();
+const handleSubmit = async (event) =>{
+  event.preventDefault();
+        
+  if (email === '' || password === '') {
+    setErrorMessage('Les champs Email et mot de passe ne doivent pas être vides');
+    return;
+  }
+  console.log(`Email: ${email}, Password: ${password}`);
 
-    const data = {
-      email,
-      password
-    }
+        try {
+            const response = await fetch("http://localhost:3001/api/v1/user/login", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({email, password}),
+          });
 
-    console.log(data); 
+        if (response.ok) {
+            const data = await response.json();
 
-    if (data.email !== '' && data.password !== '') {
-      fetch("http://localhost:3001/api/v1/user/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-      })
-      .then((response) => response.json()) // Convertit la réponse en JSON
-      .then((data) => {
-        console.log(data);
-        if (data.body.token) {
-          const valeurUserToken = JSON.stringify(data.body.token)
-          if (rememberMe) { // Si la case "Remember me" est cochée, utilise localStorage
-            window.localStorage.setItem("userToken", valeurUserToken)
-          } else { // Sinon, utilise sessionStorage
-            window.sessionStorage.setItem("userToken", valeurUserToken)
-          }
-          dispatch(login(valeurUserToken)); // Dispatche l'action login avec le token comme payload
-          navigate('/userpage');
-        } else {
-          setErrorMessage("Utilisateur inconnu");
+
+            const token = data.body.token;
+            dispatch(loginSuccess(token));
+            window.sessionStorage.setItem("token", token)
+            if (rememberMe) { // Si la case "Remember me" est cochée, utilise localStorage
+              window.localStorage.setItem("token", token)
+            }
+              navigate('/profile');
+ 
+          } else {
+
+            const error = "Utilisateur inconnu"
+                dispatch(loginFailed(error));
+            }
+        } catch (error) {
+            console.error(error);
         }
-      })
-    } else if (data.email === '' && data.password !== '') {
-      setErrorMessage("Merci de renseigner un email");
-    } else if (data.email !== '' && data.password === '') {
-      setErrorMessage("Merci de renseigner un mot de passe");
-    } else {
-      setErrorMessage("Merci de compléter les champs");
     }
-  };
 
   return (
     <main className="main bg-dark">
       <section className="sign-in-content">
         <i className="fa fa-user-circle sign-in-icon"></i>
         <h1>Sign In</h1>
-        <form>
+        <form onSubmit={handleSubmit}>
           <div className="input-wrapper">
             <label htmlFor="email">Email</label>
-            <input type="email" id="email" value={email} onChange={(e) => setEmail(e.target.value)} />
+            <input type="email" id="email" value={email} onChange={(event) => setEmail(event.target.value)} />
           </div>
           <div className="input-wrapper">
             <label htmlFor="password">Password</label>
-            <input type="password" id="password" value={password} onChange={(e) => setPassword(e.target.value)} />
+            <input type="password" id="password" value={password} onChange={(event) => setPassword(event.target.value)} />
           </div>
           <div className="input-remember">
-            <input type="checkbox" id="remember-me" checked={rememberMe} onChange={(e) => setRememberMe(e.target.checked)} /><label htmlFor="remember-me">Remember me</label>
+            <input type="checkbox" id="remember-me" checked={rememberMe} onChange={(event) => setRememberMe(event.target.checked)} />
+            <label htmlFor="remember-me">Remember me</label>
           </div>
-          <button className="sign-in-button" type="submit" onClick={login}>Sign In</button>
-          <p className='error-message' id="error">{errorMessage}</p>
+          <button className="sign-in-button">Sign In</button>
+          {errorMessage && <p className='error-message'>{errorMessage}</p>}
         </form>
       </section>     
     </main>    

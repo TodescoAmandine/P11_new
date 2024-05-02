@@ -3,7 +3,7 @@ import { Provider } from 'react-redux';
 import ReactDOM from 'react-dom/client'
 import App from './App.jsx'
 import './styles/index.css'
-import { store } from './store.jsx';
+import store from './redux/store.jsx';
 
 
 
@@ -13,5 +13,5 @@ ReactDOM.createRoot(document.getElementById('root')).render(
     <App />
     </Provider>
   </React.StrictMode>,
-)
-export default Root;
+);
+//export default Root;

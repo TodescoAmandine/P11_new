@@ -1,37 +1,48 @@
 import React from 'react';
-import { NavLink } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { logout } from './store/authenticationSlice';
+import logo from '../assets/images/argentBankLogo-min.webp';
+import  {logout } from '../redux/actions/actions.authen';
 
 
-const Navigation = () => {
-  const dispatch = useDispatch(); //  useDispatch pour obtenir la fonction dispatch
+function Navigation (){
+  const isConnected = useSelector((state) => state.auth.token);
+
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleLogout = () => {
-    // Supprime le token du localStorage et du sessionStorage
-    window.localStorage.removeItem('userToken');
-    window.sessionStorage.removeItem('userToken');
-    // Dispatche l'action logout
     dispatch(logout());
-  };
-  
-// Vérifie si l'utilisateur est connecté avec le token stocké dans le localStorage ou le sessionStorage
-const isLoggedIn = window.localStorage.getItem('userToken') || window.sessionStorage.getItem('userToken');
-
-    return (
-        <nav className='main-nav'>
-        <NavLink to='/' className='main-nav-logo'>
-          <img src={logo} alt='Argent Bank Logo' className='main-nav-logo-image' />
-          <h1 className='sr-only'>Argent Bank</h1>
-        </NavLink>
-        <div onClick={handleLogout} >
-        <NavLink to={isLoggedIn ? '/' : '/login'}> 
-            <i className='fa fa-user-circle'>
-              </i>{isLoggedIn ? 'Sign Out' : 'Sign In'} 
+    sessionStorage.removeItem('token');
+    localStorage.removeItem('token');
+    navigate('/');
+  }
+  return (
+    <nav className='main-nav'>
+      <NavLink to='/' className='main-nav-logo'>
+        <img src={logo} alt='Argent Bank Logo' className='main-nav-logo-image' />
+        <h1 className='sr-only'>Argent Bank</h1>
+      </NavLink>
+      {isConnected ? (
+        <div>
+          <Link to='/profile'>
+            <i className='fa-solid fa-2x fa-circle-user' />
+          </Link>
+          <Link to='/' onClick={handleLogout}>            
+            <p> Sign out </p>
+          </Link>
+        </div>
+      ) : (
+        <div>
+          <NavLink to='/login' className='main-nav-item'>
+            <i className='fa fa-user-circle'></i>Sign In
           </NavLink>
         </div>
-      </nav>
-    );
-};
-
-export default MainNav;
+      )}
+    </nav>
+  );
+}
+  
+export default Navigation;
