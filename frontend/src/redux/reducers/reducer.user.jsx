@@ -7,6 +7,8 @@ const initialState = {
 }
 // Reducer pour les données utilisateur get et edit//
 export const userReducer = (state = initialState, action ) => {
+    console.log("Updating userData to", action.payload);
+
     switch (action.type) {
         case GET_USERPROFILE:
             return {
@@ -14,15 +16,20 @@ export const userReducer = (state = initialState, action ) => {
                 status: 'SUCCEEDED',
                 userData: action.payload
             }
-        case EDIT_USERNAME: 
-            return {
-                ...state,
-                status: "MODIFIED",
-                userData: {
-                    ...state.userData,
-                    username: action.payload
-                } 
-            } 
+            case EDIT_USERNAME: 
+            console.log("Action payload:", action.payload);
+          
+            console.log("Previous state:", state);
+            const newState = {
+              ...state,
+              status: "MODIFIED",
+              userData: {
+                ...state.userData,
+                username: action.payload
+              } 
+            };
+            console.log("New state:", newState);
+            return newState;
         case LOGOUT: {
             return initialState;  
         }   

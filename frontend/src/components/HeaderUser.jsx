@@ -16,33 +16,38 @@ function HeaderUser () {
   const dispatch = useDispatch();
 
   const handleSubmitUsername = async (event) => {
-      event.preventDefault();
+    event.preventDefault();
 
-      try {
-          const response = await fetch('http://localhost:3001/api/v1/user/profile', {
-              method: 'PUT',
-              headers: {
-                  'Content-Type': 'application/json',
-                  'Authorization': `Bearer ${token}`,
-              },
-              body: JSON.stringify({userName}),
-          });
-          if (response.ok) {
-              const data = await response.json();
-              const username = data.body.userName;
-              console.log(data);
-
-              dispatch(updateUsername(username));
-              setDisplay(!display);
-          } else {
-              console.log("Invalid Fields")
-          }
-
-      } catch (error) {
-          console.error(error);
+    if (!userName) {
+      console.log("Username is required");
+      return;
+    }
+    
+    try {
+      const response = await fetch('http://localhost:3001/api/v1/user/profile', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify({userName}),
+      });
+    
+      if (!response.ok) {
+        console.log("Invalid Fields");
+        return;
       }
+    
+      const data = await response.json();
+      const username = data.body.userName;
+      console.log(data);
+    
+      dispatch(updateUsername(username));
+      setDisplay(!display);
+    } catch (error) {
+      console.error(error);
+    }
   }
-  
   return (
       <div className="header">
           { display ? 
@@ -62,8 +67,8 @@ function HeaderUser () {
                           <input
                               type="text"
                               id="username"
-                              defaultValue={userData.username}
-                              onChange={(event) => setUserName(event.target.value)}
+                              value={userName}
+                              onChange={e => setUserName(e.target.value)}
                           />
                       </div>
                       <div className="edit-input">

@@ -1,3 +1,4 @@
+
 import React from 'react';
 import Navigation from '../components/Navigations';
 import Footer from '../components/Footer';
@@ -7,14 +8,13 @@ import accountData from '../data/accountdata.json';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { userProfile } from '../redux/actions/actions.user';
-import { useNavigate } from 'react-router-dom'; // Change this line
+import { useNavigate } from 'react-router-dom';
 
 function User () {
     const token = useSelector((state) => state.auth.token);
     const dispatch = useDispatch();
-    const navigate = useNavigate(); // Change this line
+    const navigate = useNavigate(); 
 
-    /* Asynchronous function that retrieves user data and updates it with useEffect */
     useEffect(() => {
         if (token) {
             const userData = async () => {
@@ -28,10 +28,7 @@ function User () {
                     });
                     if (response.ok) {
                         const data = await response.json();
-                        /* 
-                            Checking that the query response is indeed retrieved
-                            console.log(data) 
-                        */
+// Création d'un objet userData pour stocker les données de l'utilisateur
                         const userData = {
                             createdAt: data.body.createdAt,
                             updatedAt: data.body.updatedAt,
@@ -41,8 +38,10 @@ function User () {
                             lastname: data.body.lastName,
                             username: data.body.userName
                         }
-                        /* Return user data in redux state */
+// Dispatch de l'action userProfile pour stocker les données de l'utilisateur dans le store Redux
                         dispatch(userProfile(userData));
+                      //  dispatch(userProfile(data.body));
+
                     } else {
                         console.log("error while retrieving profile");
                     }
@@ -53,7 +52,7 @@ function User () {
             userData();
         }
     }, [dispatch, token]);
-
+// Redirection à la page de connexion si l'utilisateur n'est pas connecté
     useEffect(() => {
         if (!token) {
           navigate('/login');
