@@ -19,7 +19,7 @@ function Navigation (){
 //   console.log("Redux state:", state);
 //   return state.userData ? state.userData.username : '';
 // });
-const username = useSelector(state => state.user.userData.username);
+  const username = useSelector(state => state.user.userData.username);
 
   //const firstname = useSelector(state => state.user.firstname); 
 
@@ -37,14 +37,14 @@ const username = useSelector(state => state.user.userData.username);
         <h1 className='sr-only'>Argent Bank</h1>
       </NavLink>
       {isConnected ? (
-        <div>
+        <div className="link-container">
           <Link to='/profile'>
-            <i className='fa-solid fa-2x fa-circle-user' />
-            <p>{username}</p>
+            <i className='fa fa-circle-user' />
+            {username}
           </Link>
           <Link to='/' onClick={handleLogout}>   
-          <i className='fa-solid fa-arrow-right-from-bracket' />
-            <p> Sign out </p>
+          <i className='fa-solid fa-right-from-bracket' />
+             Sign out 
           </Link>
         </div>
       ) : (
