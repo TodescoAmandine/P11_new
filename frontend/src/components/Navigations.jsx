@@ -12,9 +12,14 @@ function Navigation (){
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const username = useSelector(state => state.userData ? state.userData.username : '');
-  console.log("state.userData:", useSelector(state => state.userData));
-  console.log("Username from Redux state:", username);
+  // const username = useSelector(state => state.userData ? state.userData.username : '');
+  // console.log("state.userData:", useSelector(state => state.userData));
+  // console.log("Username from Redux state:", username);
+// const username = useSelector(state => {
+//   console.log("Redux state:", state);
+//   return state.userData ? state.userData.username : '';
+// });
+const username = useSelector(state => state.user.userData.username);
 
   //const firstname = useSelector(state => state.user.firstname); 
 

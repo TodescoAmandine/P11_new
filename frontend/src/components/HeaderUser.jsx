@@ -41,9 +41,14 @@ function HeaderUser () {
       const data = await response.json();
       const username = data.body.userName;
       console.log(data);
+      console.log("userName:", userName);
     
       dispatch(updateUsername(username));
       setDisplay(!display);
+
+      // dispatch({ type: EDIT_USERNAME, payload: username });
+      // setDisplay(!display);
+
     } catch (error) {
       console.error(error);
     }
@@ -67,8 +72,8 @@ function HeaderUser () {
                           <input
                               type="text"
                               id="username"
-                              value={userName}
-                              onChange={e => setUserName(e.target.value)}
+                              defaultValue={userData.username}
+                              onChange={(event) => setUserName(event.target.value)}
                           />
                       </div>
                       <div className="edit-input">
