@@ -53,11 +53,11 @@ function User () {
         }
     }, [dispatch, token]);
 // Redirection à la page de connexion si l'utilisateur n'est pas connecté
-    useEffect(() => {
-        if (!token) {
-          navigate('/login');
-        }
-      }, [token, navigate]);
+    // useEffect(() => {
+    //     if (!token) {
+    //       navigate('/login');
+    //     }
+    //   }, [token, navigate]);
 
     return (
         <div className='page_account'>
