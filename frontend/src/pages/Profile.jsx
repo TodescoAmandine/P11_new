@@ -29,15 +29,21 @@ function User () {
                     if (response.ok) {
                         const data = await response.json();
 // Création d'un objet userData pour stocker les données de l'utilisateur
+                        // const userData = {
+                        //     createdAt: data.body.createdAt,
+                        //     updatedAt: data.body.updatedAt,
+                        //     id: data.body.id,
+                        //     email: data.body.email,
+                        //     firstname: data.body.firstName,
+                        //     lastname: data.body.lastName,
+                        //     username: data.body.userName
+                        // }
                         const userData = {
-                            createdAt: data.body.createdAt,
-                            updatedAt: data.body.updatedAt,
-                            id: data.body.id,
-                            email: data.body.email,
-                            firstname: data.body.firstName,
-                            lastname: data.body.lastName,
-                            username: data.body.userName
-                        }
+                          ...data.body,
+                          firstname: data.body.firstName,
+                          lastname: data.body.lastName,
+                          username: data.body.userName
+                        };
 // Dispatch de l'action userProfile pour stocker les données de l'utilisateur dans le store Redux
                         dispatch(userProfile(userData));
                       //  dispatch(userProfile(data.body));
