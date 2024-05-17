@@ -1,5 +1,4 @@
-//import { createSelector } from 'reselect';
-import { GET_USERPROFILE, EDIT_USERNAME } from "../utils/actions.types";
+import { GET_USERPROFILE, EDIT_USERNAME } from "./actions.types";
 
 /* récupération des données utilisateur */
 export const userProfile = (userData) => {
@@ -10,11 +9,11 @@ export const userProfile = (userData) => {
 }
 
 /* edition du nom d'utilisateur */
-export const updateUsername = (username) => {
-    console.log("Dispatching updateUsername with", username);
+export const updateUsername = (userName) => {
+    console.log("Dispatching updateUsername with", userName);
 
     return {
         type: EDIT_USERNAME,
-        payload: username,
+        payload: userName,
     }
 }

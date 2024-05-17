@@ -10,7 +10,8 @@ const SignIn = () => {
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
 
-  const [rememberMe, setRememberMe] = useState(false); // état case à cocher "Remember me"
+  // Etat pour la case "Remember me"
+  const [rememberMe, setRememberMe] = useState(false); 
 
 
   const navigate = useNavigate();
@@ -35,7 +36,7 @@ const SignIn = () => {
       if (response.ok) {
         const data = await response.json();
         const token = data.body.token;
-        dispatch(loginSuccess(token));
+        dispatch(loginSuccess(token)); // Dispatch de l'action loginSuccess pour mettre à jour le store Redux
         window.sessionStorage.setItem("token", token)
         if (rememberMe) { // Si la case "Remember me" est cochée, utilise localStorage
           window.localStorage.setItem("token", token)

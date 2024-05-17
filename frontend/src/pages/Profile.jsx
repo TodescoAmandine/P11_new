@@ -8,12 +8,13 @@ import accountData from '../data/accountdata.json';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { userProfile } from '../redux/actions/actions.user';
-import { useNavigate } from 'react-router-dom';
+// import { useNavigate } from 'react-router-dom';
 
 function User () {
+  // Récupération du token pour savoir si l'utilisateur est connecté
     const token = useSelector((state) => state.auth.token);
     const dispatch = useDispatch();
-    const navigate = useNavigate(); 
+
 
     useEffect(() => {
         if (token) {
@@ -28,25 +29,9 @@ function User () {
                     });
                     if (response.ok) {
                         const data = await response.json();
-// Création d'un objet userData pour stocker les données de l'utilisateur
-                        // const userData = {
-                        //     createdAt: data.body.createdAt,
-                        //     updatedAt: data.body.updatedAt,
-                        //     id: data.body.id,
-                        //     email: data.body.email,
-                        //     firstname: data.body.firstName,
-                        //     lastname: data.body.lastName,
-                        //     username: data.body.userName
-                        // }
-                        const userData = {
-                          ...data.body,
-                          firstname: data.body.firstName,
-                          lastname: data.body.lastName,
-                          username: data.body.userName
-                        };
+
 // Dispatch de l'action userProfile pour stocker les données de l'utilisateur dans le store Redux
-                        dispatch(userProfile(userData));
-                      //  dispatch(userProfile(data.body));
+                        dispatch(userProfile(data.body));
 
                     } else {
                         console.log("error while retrieving profile");
@@ -58,12 +43,7 @@ function User () {
             userData();
         }
     }, [dispatch, token]);
-// Redirection à la page de connexion si l'utilisateur n'est pas connecté
-    // useEffect(() => {
-    //     if (!token) {
-    //       navigate('/login');
-    //     }
-    //   }, [token, navigate]);
+
 
     return (
         <div className='page_account'>

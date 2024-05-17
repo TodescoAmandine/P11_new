@@ -1,6 +1,6 @@
-import { LOGIN_SUCCESS, LOGIN_FAIL, LOGOUT } from "../utils/actions.types";
+import { LOGIN_SUCCESS, LOGIN_FAIL, LOGOUT } from "../actions/actions.types";
 
-
+// Initialisation du state pour l'authentification
 const initialState = {
     status: "VOID",
     isConnected: false,

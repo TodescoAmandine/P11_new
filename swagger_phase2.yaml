@@ -1,0 +1,472 @@
+swagger: '2.0'
+info:
+  title: Bank Argent API documentation
+  description: Contains all available API endpoints in this codebase
+  version: '1.0.0'
+  termsOfService: 'http://swagger.io/terms/'
+host: localhost:3001
+basePath: /api/v1
+schemes:
+  - http
+paths:
+  /user/login:
+    post:
+      tags:
+        - User Module
+      summary: Login
+      description: API for Login
+      parameters:
+        - in: body
+          name: body
+          description: Login Payload
+          required: true
+          schema:
+            $ref: '#/definitions/Login'
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Login Successfully
+          schema:
+            $ref: '#/definitions/LoginResponse'
+        '400':
+          description: Invalid Fields
+        '500':
+          description: Internal Server Error
+  /user/signup:
+    post:
+      tags:
+        - User Module
+      summary: Signup
+      description: API for Signup
+      parameters:
+        - in: body
+          name: body
+          description: Signup Payload
+          required: true
+          schema:
+            $ref: '#/definitions/User'
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Signup Successfully
+          schema:
+            $ref: '#/definitions/ApiResponse'
+        '400':
+          description: Invalid Fields
+        '500':
+          description: Internal Server Error
+  /user/profile:
+    post:
+      security:
+        - Bearer: []
+      tags:
+        - User Module
+      summary: User Profile API
+      description: API for fetching a user profile
+      #produces:
+       # - application/json
+      responses:
+        '200':
+          description: User profile retrieved successully
+          schema:
+            $ref: '#/definitions/ApiResponse'
+        '400':
+          description: Invalid Fields
+        '500':
+          description: Internal Server Error
+    put:
+      security:
+        - Bearer: []
+      tags:
+        - User Module
+      summary: User Profile API
+      description: API for updating a user profile
+      parameters:
+        - in: body
+          name: body
+          description: Update user profile attributes
+          required: true
+          schema:
+            $ref: '#/definitions/UserProfile'
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: User profile retrieved successully
+          schema:
+            $ref: '#/definitions/ApiResponse'
+        '400':
+          description: Invalid Fields
+        '500':
+          description: Internal Server Error
+  /user/transactions/month_ID:
+    get:
+      tags:
+      - Transactions Module
+      summary: Get all transactions for the current month grouped by account
+      description: Month for which transactions are requested
+      parameters:
+        - in: body
+          name: month_ID
+          description: ID of the month
+          required: true
+          schema:
+            $ref: '#/definitions/transaction_month'
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: Transactions retrieved successfully
+          schema:
+            $ref: '#/definitions/transaction_monthResponse'
+        "400":
+          description: Transaction not found
+        "401":
+          description: Unauthorized access
+        "500":
+          description: Internal Server Error
+  /user/transactions/account_ID:
+    get:
+      tags:
+      - Transactions Module
+      summary: Get all specifics transactions from an account
+      description: API to retrieve all specifics transactions from an account
+      parameters:
+        - in: body
+          name: transaction_ID
+          description: ID of the transaction
+          required: true
+          schema:
+            $ref: '#/definitions/transaction_ID'
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: Transactions retrieved successfully
+          schema:
+            $ref: '#/definitions/transaction_IDResponse'
+        "400":
+          description: Transaction not found
+        "401":
+          description: Unauthorized access
+        "500":
+          description: Internal Server Error
+  /user/transactions/category_ID:
+    put:
+      security:
+      - Bearer: []
+      tags:
+      - Transactions Module
+      summary:  Updated Category description
+      description: API to Updated Category description
+      parameters:
+        - in: body
+          name: transaction_ID
+          description: ID of the transaction
+          required: true
+          schema:
+            $ref: '#/definitions/transaction_category'
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: Transactions modified successfully
+          schema:
+            $ref: '#/definitions/transaction_categoryResponse'
+        "400":
+          description: Invalid request
+        "401":
+          description: Unauthorized allowed
+        "500":
+          description: Internal Server Error
+  /user/transactions/note_ID:
+    post:
+      security:
+      - Bearer: []
+      tags:
+      - Transactions Module
+      summary:  Add a note description
+      description: Add a note of description
+      parameters:
+        - in: body
+          name: note
+          description: Note description
+          required: true
+          schema:
+            $ref: '#/definitions/transaction_note'
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: Transaction note added successfully
+          schema:
+            $ref: '#/definitions/transaction_noteResponse'
+        "400":
+          description: Invalid request
+        "401":
+          description: Unauthorized allowed
+        "500":
+          description: Internal Server Error - Transaction note not added
+    put:
+      security:
+      - Bearer: []
+      tags:
+      - Transactions Module
+      summary:  Modified a note description
+      description: Modified a note of description
+      parameters:
+        - in: body
+          name: note
+          description: Note description ID
+          required: true
+          schema:
+            $ref: '#/definitions/transaction_note'
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: Transaction is successfully modified 
+          schema:
+            $ref: '#/definitions/transaction_noteResponse'
+        "400":
+          description: Invalid request
+        "401":
+          description: Unauthorized allowed
+        "500":
+          description: Internal Server Error - Transaction is not modified
+    delete:
+      security:
+      - Bearer: []
+      tags:
+      - Transactions Module
+      summary:  Delete the note description
+      description: Delete the note of description
+      parameters:
+        - in: body
+          name: note
+          description: Note description ID
+          required: true
+          schema:
+            $ref: '#/definitions/transaction_note'
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: Transaction is successfully deleted
+          schema:
+            $ref: '#/definitions/transaction_noteResponse'
+        "400":
+          description: Invalid request
+        "401":
+          description: Unauthorized allowed
+        "500":
+          description: Internal Server Error - Transaction is not deleted
+securityDefinitions:
+  Bearer:
+    type: apiKey
+    name: Authorization
+    in: header
+definitions:
+  User:
+    properties:
+      email:
+        type: string
+        description: user email
+      password:
+        type: string
+        description: user password
+      firstName:
+        type: string
+        description: user first name
+      lastName:
+        type: string
+        description: user last name
+      userName:
+        type: string
+        description: user public name
+  Login:
+    properties:
+      email:
+        type: string
+        description: user email
+      password:
+        type: string
+        description: user password
+  ApiResponse:
+    type: object
+    properties:
+      status:
+        type: integer
+      message:
+        type: string
+      body:
+        type: object
+        properties:
+          id:
+            type: string
+          email:
+            type: string
+  LoginResponse:
+    type: object
+    properties:
+      token:
+        type: string
+  UserProfile:
+    type: object
+    properties:
+      userName:
+        type: string
+  transaction_month:
+    type: object
+    properties:
+      account_ID:
+        type: string
+        description: Type of account
+      month_ID:
+        type: string
+        description: ID of the month
+      account_type:
+        type: string
+        description: Type of account
+      amount:
+        type: number
+        description: Transaction amount
+      currency:
+        type: string
+        description: Transaction amount
+  transaction_monthResponse:
+    type: object
+    properties:
+      account_ID:
+        type: string
+        description: ID of account
+      date:
+        type: string
+        format: date
+        description: Date of transaction
+      account_type:
+        type: string
+        description: Type of account
+      amount:
+        type: number
+        description: Transaction amount
+      currency:
+        type: string
+        description: Transaction currency
+  transaction_ID:
+    type: object
+    properties:
+      account_ID:
+        type: string
+        description: ID of account
+      month_ID:
+        type: string
+        description: ID of the month
+      account_type:
+        type: string
+        description: Type of account
+      account_number:
+        type: string
+        description: Account number
+      description:
+        type: string
+        description: Transaction description
+      transaction type:
+        type: string
+        description: Transaction description
+      category:
+        type: string
+        description: Transaction description
+      note:
+        type: string
+        description: Transaction description
+      amount:
+        type: number
+        description: Transaction amount
+      balance:
+        type: number
+        description: Account balance after transaction
+      currency:
+        type: string
+        description: Transaction currency
+  transaction_IDResponse:
+    type: object
+    properties:
+      account_ID:
+        type: string
+        description: ID of account
+      date:
+        type: string
+        format: date
+        description: Date of transaction
+      account_type:
+        type: string
+        description: Type of account
+      account_number:
+        type: string
+        description: Account number
+      description:
+        type: string
+        description: Transaction description
+      amount:
+        type: number
+        description: Transaction amount
+      balance:
+        type: number
+        description: Account balance after transaction
+      currency:
+        type: string
+        description: Transaction currency
+  transaction_category:
+    type: object
+    properties:
+      account_ID:
+        type: string
+        description: Account ID of the transaction
+      transaction_ID:
+        type: number
+        description: ID of the transaction
+      transaction type:
+        type: string
+        enum: [Saving, Subscription, Services, Education, Hobbies, Health, Transportation, Accommodation, Food]
+        description: Category of the transaction
+  transaction_categoryResponse:
+    type: object
+    properties:
+      account_ID:
+        type: string
+        description: Account ID of the transaction
+      transaction_ID:
+        type: number
+        description: ID of the transaction
+      transaction type:
+        type: string
+        description: Category of the transaction
+  transaction_note:
+    type: object
+    properties:
+      account_ID:
+        type: string
+        description: Account ID of the transaction
+      transaction_ID:
+        type: number
+        description: ID of the transaction
+      note:
+        type: string
+        description: Note of the transaction
+  transaction_noteResponse:
+    type: object
+    properties:
+      account_ID:
+        type: string
+        description: Account ID of the transaction
+      transaction_ID:
+        type: number
+        description: ID of the transaction
+      note:
+        type: string
+        description: Note of the transaction
+
+  

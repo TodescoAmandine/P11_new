@@ -4,6 +4,7 @@ import { updateUsername } from '../redux/actions/actions.user';
 import { useState } from 'react';
 
 function HeaderUser () {
+  // Récupération du token et des données de l'utilisateur
   const token = useSelector((state) => state.auth.token);
   const userData = useSelector((state) => state.user.userData);
 
@@ -11,10 +12,9 @@ function HeaderUser () {
 
   const [userName, setUserName] = useState('');
 
-
-
   const dispatch = useDispatch();
 
+  // Fonction pour envoyer la requête de modification du nom d'utilisateur
   const handleSubmitUsername = async (event) => {
     event.preventDefault();
 
@@ -36,18 +36,13 @@ function HeaderUser () {
       if (!response.ok) {
         console.log("Invalid Fields");
         return;
-      }
-    
+      }    
       const data = await response.json();
-      const username = data.body.userName;
       console.log(data);
       console.log("userName:", userName);
-    
-      dispatch(updateUsername(username));
+// Dispatch de l'action updateUsername pour mettre à jour le nom d'utilisateur dans le store Redux    
+      dispatch(updateUsername(userName));
       setDisplay(!display);
-
-      // dispatch({ type: EDIT_USERNAME, payload: username });
-      // setDisplay(!display);
 
     } catch (error) {
       console.error(error);
@@ -59,7 +54,7 @@ function HeaderUser () {
               <div>
                   <h1>Welcome back 
                       <br />
-                      {userData.firstname} {userData.lastname} !
+                      {userData.firstName} {userData.lastName} !
                   </h1>
                   <button className="edit-button" onClick={() => setDisplay(!display)}>Edit Name</button>
               </div>
@@ -72,7 +67,7 @@ function HeaderUser () {
                           <input
                               type="text"
                               id="username"
-                              defaultValue={userData.username}
+                              defaultValue={userData.userName}
                               onChange={(event) => setUserName(event.target.value)}
                           />
                       </div>
@@ -81,7 +76,7 @@ function HeaderUser () {
                           <input
                               type="text"
                               id="firstname" 
-                              defaultValue={userData.firstname}
+                              defaultValue={userData.firstName}
                               disabled={true}
                           />
                       </div>
@@ -90,7 +85,7 @@ function HeaderUser () {
                           <input
                               type="text"
                               id="lastname" 
-                              defaultValue={userData.lastname}
+                              defaultValue={userData.lastName}
                               disabled={true}
                           />
                       </div>

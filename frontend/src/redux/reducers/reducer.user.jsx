@@ -1,6 +1,6 @@
-import { GET_USERPROFILE, EDIT_USERNAME, LOGOUT } from "../utils/actions.types"
+import { GET_USERPROFILE, EDIT_USERNAME, LOGOUT } from "../actions/actions.types"
 
-
+// Initialisation du state pour les données utilisateur
 const initialState = {
     status: 'VOID',
     userData: {}
@@ -25,7 +25,7 @@ export const userReducer = (state = initialState, action ) => {
               status: "MODIFIED",
               userData: {
                 ...state.userData,
-                username: action.payload
+                userName: action.payload
               } 
             };
             console.log("New state:", newState);

@@ -1,3 +1,5 @@
+//types des actions
+
 /* SIGN IN */
 
 export const LOGIN_SUCCESS = "LOGIN_SUCCESS";

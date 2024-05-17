@@ -7,22 +7,15 @@ import  {logout } from '../redux/actions/actions.authen';
 
 
 function Navigation (){
+  // Récupération du token pour savoir si l'utilisateur est connecté
   const isConnected = useSelector((state) => state.auth.token);
+
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  // const username = useSelector(state => state.userData ? state.userData.username : '');
-  // console.log("state.userData:", useSelector(state => state.userData));
-  // console.log("Username from Redux state:", username);
-// const username = useSelector(state => {
-//   console.log("Redux state:", state);
-//   return state.userData ? state.userData.username : '';
-// });
-  const username = useSelector(state => state.user.userData.username);
-
-  //const firstname = useSelector(state => state.user.firstname); 
-
+  // Récupération du nom d'utilisateur
+  const userData = useSelector((state) => state.user.userData);
 
   const handleLogout = () => {
     dispatch(logout());
@@ -40,7 +33,7 @@ function Navigation (){
         <div className="link-container">
           <Link to='/profile'>
             <i className='fa fa-circle-user' />
-            {username}
+            {userData.userName}
           </Link>
           <Link to='/' onClick={handleLogout}>   
           <i className='fa-solid fa-right-from-bracket' />
