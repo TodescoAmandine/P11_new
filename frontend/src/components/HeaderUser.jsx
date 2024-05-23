@@ -1,7 +1,8 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { updateUsername } from '../redux/actions/actions.user';
+// import { updateUsername } from '../redux/actions/actions.user';
 import { useState } from 'react';
+import { editUserName } from '../redux/reducers/reducer.user';
 
 function HeaderUser () {
   // Récupération du token et des données de l'utilisateur
@@ -41,7 +42,11 @@ function HeaderUser () {
       console.log(data);
       console.log("userName:", userName);
 // Dispatch de l'action updateUsername pour mettre à jour le nom d'utilisateur dans le store Redux    
-      dispatch(updateUsername(userName));
+      // dispatch(editUserName(userName));
+      dispatch(editUserName(userName));
+
+      // dispatch(setUserProfile(userData));
+
       setDisplay(!display);
 
     } catch (error) {
@@ -67,7 +72,8 @@ function HeaderUser () {
                           <input
                               type="text"
                               id="username"
-                              defaultValue={userData.userName}
+                              defaultValue={userName}
+                              // defaultValue={userData.userName}
                               onChange={(event) => setUserName(event.target.value)}
                           />
                       </div>

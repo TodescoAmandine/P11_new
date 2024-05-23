@@ -1,41 +1,39 @@
-import { GET_USERPROFILE, EDIT_USERNAME, LOGOUT } from "../actions/actions.types"
+import { createSlice } from "@reduxjs/toolkit";
 
-// Initialisation du state pour les données utilisateur
-const initialState = {
-    status: 'VOID',
-    userData: {}
-}
-// Reducer pour les données utilisateur get et edit//
-export const userReducer = (state = initialState, action ) => {
-    console.log("Updating userData to", action.payload);
-
-    switch (action.type) {
-        case GET_USERPROFILE:
-            return {
-                ...state,
-                status: 'SUCCEEDED',
-                userData: action.payload
-            }
-            case EDIT_USERNAME: 
-            console.log("Action payload:", action.payload);
-          
-            console.log("Previous state:", state);
-            const newState = {
-              ...state,
-              status: "MODIFIED",
-              userData: {
-                ...state.userData,
-                userName: action.payload
-              } 
-            };
-            console.log("New state:", newState);
-            return newState;
-        case LOGOUT: {
-            return initialState;  
-        }   
-        default:
-            return state;    
+const userSlice = createSlice({
+    name: "user",
+    initialState: {
+      status: 'VOID',
+      userData: {
+        firstName: "",
+        lastName: "",
+        userName: "",
+      },
+    },
+  reducers: {
+    getUserProfile: (state, action) => {
+      state.status = 'SUCCEEDED';
+      state.userData = action.payload;
+    },
+    editUserName:  (state, action) => {
+        const { userName } = action.payload;
+        state.userData.userName = userName;
+      },
+    setUserProfile: (state, action) => {
+      const { firstName, lastName, userName } = action.payload;
+      state.userData.firstName = firstName;
+      state.userData.lastName = lastName;
+      state.userData.userName = userName;
+    },
+    logout: (state) => {
+      return {
+        status: 'VOID',
+        userData: {}
+      };
     }
-}
+  },
+});
 
-        
+export const { getUserProfile, editUserName, setUserProfile, logout } = userSlice.actions;
+export default userSlice.reducer;
+export const userReducer = userSlice.reducer;

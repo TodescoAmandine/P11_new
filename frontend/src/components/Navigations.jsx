@@ -1,9 +1,12 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import logo from '../assets/images/argentBankLogo-min.webp';
 import  {logout } from '../redux/actions/actions.authen';
+// import { setUserProfile } from '../redux/actions/actions.user';
+// import { getUserProfile, setUserProfile } from '../redux/reducers/reducer.user.jsx';
+import {  setUserProfile } from '../redux/reducers/reducer.user.jsx';
 
 
 function Navigation (){
@@ -16,6 +19,14 @@ function Navigation (){
 
   // Récupération du nom d'utilisateur
   const userData = useSelector((state) => state.user.userData);
+  // dispatch(setUserProfile(userData));
+  useEffect(() => {
+    dispatch(setUserProfile(userData));
+    // dispatch(getUserProfile(userData));
+  }, [dispatch, userData]);
+
+  // useEffect(() => {
+  //   dispatch(setUserProfile(userData.userName));}, [dispatch, userData.userName]);
 
   const handleLogout = () => {
     dispatch(logout());

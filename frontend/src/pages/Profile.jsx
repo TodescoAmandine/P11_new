@@ -7,7 +7,9 @@ import HeaderUser from '../components/HeaderUser';
 import accountData from '../data/accountdata.json';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { userProfile } from '../redux/actions/actions.user';
+// import { userProfile } from '../redux/actions/actions.user';
+import { getUserProfile } from '../redux/reducers/reducer.user';
+
 // import { useNavigate } from 'react-router-dom';
 
 function User () {
@@ -31,7 +33,10 @@ function User () {
                         const data = await response.json();
 
 // Dispatch de l'action userProfile pour stocker les données de l'utilisateur dans le store Redux
-                        dispatch(userProfile(data.body));
+                        dispatch(getUserProfile(data.body));
+                        // dispatch(getUserProfile(userData));
+
+                        console.log("user data:", data.body);
 
                     } else {
                         console.log("error while retrieving profile");
