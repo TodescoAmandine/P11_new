@@ -1,76 +1,35 @@
+import Navigation from "../components/Navigations";
+import Footer from "../components/Footer";
+import Account from "../components/Account";
+import HeaderUser from "../components/HeaderUser";
+import accountData from "../data/accountdata.json";
+import { useSelector } from "react-redux";
 
-import React from 'react';
-import Navigation from '../components/Navigations';
-import Footer from '../components/Footer';
-import Account from '../components/Account';
-import HeaderUser from '../components/HeaderUser';
-import accountData from '../data/accountdata.json';
-import { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-// import { userProfile } from '../redux/actions/actions.user';
-import { getUserProfile } from '../redux/reducers/reducer.user';
-
-// import { useNavigate } from 'react-router-dom';
-
-function User () {
+function User() {
   // Récupération du token pour savoir si l'utilisateur est connecté
-    const token = useSelector((state) => state.auth.token);
-    const dispatch = useDispatch();
+  const token = useSelector((state) => state.auth.token);
 
-
-    useEffect(() => {
-        if (token) {
-            const userData = async () => {
-                try {
-                    const response = await fetch('http://localhost:3001/api/v1/user/profile', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'Authorization': `Bearer ${token}`,
-                        },
-                    });
-                    if (response.ok) {
-                        const data = await response.json();
-
-// Dispatch de l'action userProfile pour stocker les données de l'utilisateur dans le store Redux
-                        dispatch(getUserProfile(data.body));
-                        // dispatch(getUserProfile(userData));
-
-                        console.log("user data:", data.body);
-
-                    } else {
-                        console.log("error while retrieving profile");
-                    }
-                } catch (error) {
-                    console.error(error);
-                };
-            };
-            userData();
-        }
-    }, [dispatch, token]);
-
-
-    return (
-        <div className='page_account'>
-          <Navigation />
-          {token && (
-            <main className='main bg-dark'>
-              <HeaderUser />    
-              {accountData.map((account) => (
-                <Account 
-                  key={account.id}
-                  title={account.title}
-                  type={account.type}
-                  accountnumber={account.accountnumber}
-                  amount={account.amount}
-                  description={account.description}
-                />
-              ))}
-            </main>
-          )}
-          <Footer />
-        </div>
-      );
-    }
+  return (
+    <div className="page_account">
+      <Navigation />
+      {token && (
+        <main className="main bg-dark">
+          <HeaderUser />
+          {accountData.map((account) => (
+            <Account
+              key={account.id}
+              title={account.title}
+              type={account.type}
+              accountnumber={account.accountnumber}
+              amount={account.amount}
+              description={account.description}
+            />
+          ))}
+        </main>
+      )}
+      <Footer />
+    </div>
+  );
+}
 
 export default User;
