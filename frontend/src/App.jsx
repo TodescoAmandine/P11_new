@@ -7,10 +7,12 @@ import Profile from './pages/Profile';
 import { loginSuccess } from '../src/redux/actions/actions.authen';
 import { setUserProfile } from './redux/reducers/reducer.user';
 
+//fonction App qui permet de gérer les routes de l'application
 const App = () => {
   const dispatch = useDispatch();
   const userData = useSelector((state) => state.user.userData);
 
+  // Vérification du token dans le sessionStorage ou localStorage
   useEffect(() => {
     const token = window.sessionStorage.getItem('token') || window.localStorage.getItem('token');
     const userName = userData.userName;

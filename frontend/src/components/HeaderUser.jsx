@@ -1,16 +1,17 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-// import { updateUsername } from '../redux/actions/actions.user';
 import { useState } from 'react';
 import { editUserName,setUserProfile } from '../redux/reducers/reducer.user';
 
+// fonction HeaderUser qui permet d'afficher les informations de l'utilisateur et de modifier son nom d'utilisateur
 function HeaderUser () {
   // Récupération du token et des données de l'utilisateur
   const token = useSelector((state) => state.auth.token);
+  // Récupération des données de l'utilisateur
   const userData = useSelector((state) => state.user.userData);
-
+// Initialisation de l'état display à true
   const [display, setDisplay] = useState(true);
-
+// Initialisation de l'état userName à vide
   const [userName, setUserName] = useState('');
 
   const dispatch = useDispatch();
@@ -41,14 +42,14 @@ function HeaderUser () {
       const data = await response.json();
       console.log(data);
       console.log("userName:", userName);
-// Dispatch de l'action updateUsername pour mettre à jour le nom d'utilisateur dans le store Redux    
+// Dispatch de l'action updateUsername pour mettre à jour le nom d'utilisateur dans le store Redux et de l'action setUserProfile pour mettre à jour les données de l'utilisateur 
       dispatch(editUserName(userName));
       dispatch(setUserProfile({
         ...userData,
         userName: userName,
       }));
 
-      setDisplay(!display);
+      setDisplay(!display);// Mettre display à false pour afficher les informations de l'utilisateur
 
     } catch (error) {
       console.error(error);

@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+// Création du Slice User qui permet de gérer les actions liées à l'utilisateur, comme la récupération des données de l'utilisateur, la modification du nom d'utilisateur et la déconnexion. 
 const userSlice = createSlice({
     name: "user",
     initialState: {

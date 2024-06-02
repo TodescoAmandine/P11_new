@@ -1,13 +1,13 @@
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import logo from "../assets/images/argentBankLogo-min.webp";
 import { logout } from "../redux/actions/actions.authen";
-
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getUserProfile } from "../redux/reducers/reducer.user";
 
 function Navigation() {
-  const token = useSelector((state) => state.auth.token);
+  // Récupération du token
+  const token = useSelector((state) => state.auth.token); //
 
   // Récupération du token pour savoir si l'utilisateur est connecté
   const isConnected = useSelector((state) => state.auth.token);
@@ -18,6 +18,7 @@ function Navigation() {
   // Récupération du nom d'utilisateur
   const userData = useSelector((state) => state.user.userData);
 
+  // Fonction pour déconnecter l'utilisateur
   const handleLogout = () => {
     dispatch(logout());
     sessionStorage.removeItem("token");
@@ -25,6 +26,7 @@ function Navigation() {
     navigate("/");
   };
 
+  // Récupération des données de l'utilisateur, si l'utilisateur est connecté et qu'il a un token valide alors on récupère les données de l'utilisateur
   useEffect(() => {
     if (token) {
       const userData = async () => {

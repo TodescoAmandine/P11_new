@@ -5,7 +5,7 @@ import { loginSuccess } from '../redux/actions/actions.authen';
 import { loginFailed } from '../redux/actions/actions.authen';
 
 const SignIn = () => {
-  // Déclaration des états
+  // Déclaration des états pour les champs de saisie
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
@@ -17,6 +17,7 @@ const SignIn = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
+  // Fonction pour gérer la soumission du formulaire
   const handleSubmit = async (event) => {
     event.preventDefault();
   
@@ -37,15 +38,15 @@ const SignIn = () => {
         const data = await response.json();
         const token = data.body.token;
         dispatch(loginSuccess(token)); // Dispatch de l'action loginSuccess pour mettre à jour le store Redux
-        window.sessionStorage.setItem("token", token)
+        window.sessionStorage.setItem("token", token) // Stocke le token dans le sessionStorage
         if (rememberMe) { // Si la case "Remember me" est cochée, utilise localStorage
-          window.localStorage.setItem("token", token)
+          window.localStorage.setItem("token", token)// Stocke le token dans le localStorage
         }
         if (token){ // Si le token est valide, redirige vers la page de profil
           navigate('/profile');
         } else {
           const error = "Utilisateur inconnu"
-          dispatch(loginFailed(error));
+          dispatch(loginFailed(error)); // Dispatch de l'action loginFailed pour mettre à jour le store Redux
         }
       }
     } catch (error) {

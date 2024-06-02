@@ -13,7 +13,8 @@ function User() {
   const token = useSelector((state) => state.auth.token);
 
   const navigate = useNavigate();
-
+  
+// Vérification du token pour rediriger l'utilisateur vers la page de connexion si le token n'est pas présent
   useEffect(() => {
     if (!token) {
       navigate("/login");
