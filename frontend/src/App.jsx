@@ -5,7 +5,6 @@ import Home from './pages/Home';
 import Login from './pages/Login';
 import Profile from './pages/Profile';
 import { loginSuccess } from '../src/redux/actions/actions.authen';
-// import { setUserProfile } from './redux/actions/actions.user';
 import { setUserProfile } from './redux/reducers/reducer.user';
 
 const App = () => {
@@ -17,8 +16,6 @@ const App = () => {
     const userName = userData.userName;
     if (token) {
       dispatch(loginSuccess(token));
-      // dispatch(setUserProfile(userData.userName));
-      // dispatch(setUserProfile(userData.userName));
       dispatch(setUserProfile(userData));
 
     }

@@ -101,19 +101,25 @@ paths:
           description: Invalid Fields
         '500':
           description: Internal Server Error
-  /user/transactions/month_ID:
+  /user/{account_ID}/transactions/{month_ID}:
     get:
+      security:
+      - Bearer: []
       tags:
       - Transactions Module
       summary: Get all transactions for the current month grouped by account
       description: Month for which transactions are requested
       parameters:
-        - in: body
+        - in: path
+          name: account_ID
+          description: ID of the account
+          required: true
+          type: string      
+        - in: path
           name: month_ID
           description: ID of the month
           required: true
-          schema:
-            $ref: '#/definitions/transaction_month'
+          type: string
       produces:
         - application/json
       responses:
@@ -127,19 +133,20 @@ paths:
           description: Unauthorized access
         "500":
           description: Internal Server Error
-  /user/transactions/account_ID:
+  /user/transactions/{transaction_ID}:
     get:
+      security:
+      - Bearer: []
       tags:
       - Transactions Module
-      summary: Get all specifics transactions from an account
+      summary: Get all specifics details from a transaction
       description: API to retrieve all specifics transactions from an account
       parameters:
-        - in: body
+        - in: path
           name: transaction_ID
           description: ID of the transaction
           required: true
-          schema:
-            $ref: '#/definitions/transaction_ID'
+          type: string
       produces:
         - application/json
       responses:
@@ -153,116 +160,172 @@ paths:
           description: Unauthorized access
         "500":
           description: Internal Server Error
-  /user/transactions/category_ID:
-    put:
-      security:
-      - Bearer: []
-      tags:
-      - Transactions Module
-      summary:  Updated Category description
-      description: API to Updated Category description
-      parameters:
-        - in: body
-          name: transaction_ID
-          description: ID of the transaction
-          required: true
-          schema:
-            $ref: '#/definitions/transaction_category'
-      produces:
-        - application/json
-      responses:
-        "200":
-          description: Transactions modified successfully
-          schema:
-            $ref: '#/definitions/transaction_categoryResponse'
-        "400":
-          description: Invalid request
-        "401":
-          description: Unauthorized allowed
-        "500":
-          description: Internal Server Error
-  /user/transactions/note_ID:
+  /user/transactions/{transactionId}/category:
     post:
       security:
-      - Bearer: []
+        - Bearer: []
       tags:
-      - Transactions Module
-      summary:  Add a note description
-      description: Add a note of description
+        - Transactions Module
+      summary: Add category to Transaction
+      description: API to add a category to a specific transaction
       parameters:
+        - in: path
+          name: transactionId
+          required: true
+          description: ID of the transaction to add the category to
+          type: string
         - in: body
-          name: note
-          description: Note description
+          name: body
+          description: category payload
           required: true
           schema:
-            $ref: '#/definitions/transaction_note'
+            $ref: "#/definitions/category"
       produces:
         - application/json
       responses:
         "200":
-          description: Transaction note added successfully
-          schema:
-            $ref: '#/definitions/transaction_noteResponse'
+          description: category added successfully
         "400":
-          description: Invalid request
-        "401":
-          description: Unauthorized allowed
+          description: Invalid request payload
+        "404":
+          description: Transaction not found
         "500":
-          description: Internal Server Error - Transaction note not added
+          description: Internal Server Error
     put:
       security:
-      - Bearer: []
+        - Bearer: []
       tags:
-      - Transactions Module
-      summary:  Modified a note description
-      description: Modified a note of description
+        - Transactions Module
+      summary: Update category of Transaction
+      description: API to update the category of a specific transaction
       parameters:
+        - in: path
+          name: transactionId
+          required: true
+          description: ID of the transaction to update the category for
+          type: string
         - in: body
-          name: note
-          description: Note description ID
+          name: body
+          description: Updated category payload
           required: true
           schema:
-            $ref: '#/definitions/transaction_note'
+            $ref: "#/definitions/category"
       produces:
         - application/json
       responses:
         "200":
-          description: Transaction is successfully modified 
-          schema:
-            $ref: '#/definitions/transaction_noteResponse'
+          description: category updated successfully
         "400":
-          description: Invalid request
-        "401":
-          description: Unauthorized allowed
+          description: Invalid request payload
+        "404":
+          description: Transaction not found
         "500":
-          description: Internal Server Error - Transaction is not modified
+          description: Internal Server Error
     delete:
       security:
-      - Bearer: []
+        - Bearer: []
       tags:
-      - Transactions Module
-      summary:  Delete the note description
-      description: Delete the note of description
+        - Transactions Module
+      summary: Delete category of Transaction
+      description: API to delete the category of a specific transaction
       parameters:
-        - in: body
-          name: note
-          description: Note description ID
+        - in: path
+          name: transactionId
           required: true
-          schema:
-            $ref: '#/definitions/transaction_note'
+          description: ID of the transaction to delete the category from
+          type: string
       produces:
         - application/json
       responses:
         "200":
-          description: Transaction is successfully deleted
-          schema:
-            $ref: '#/definitions/transaction_noteResponse'
-        "400":
-          description: Invalid request
-        "401":
-          description: Unauthorized allowed
+          description: category deleted successfully
+        "404":
+          description: Transaction not found
         "500":
-          description: Internal Server Error - Transaction is not deleted
+          description: Internal Server Error
+  /user/transactions/{transactionId}/note:
+    post:
+      security:
+        - Bearer: []
+      tags:
+        - Transactions Module
+      summary: Add Note to Transaction
+      description: API to add a note to a specific transaction
+      parameters:
+        - in: path
+          name: transactionId
+          required: true
+          description: ID of the transaction to add the note to
+          type: string
+        - in: body
+          name: body
+          description: Note payload
+          required: true
+          schema:
+            $ref: "#/definitions/NoteBody"
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: Note added successfully
+        "400":
+          description: Invalid request payload
+        "404":
+          description: Transaction not found
+        "500":
+          description: Internal Server Error
+    put:
+      security:
+        - Bearer: []
+      tags:
+        - Transactions Module
+      summary: Update Note of Transaction
+      description: API to update the note of a specific transaction
+      parameters:
+        - in: path
+          name: transactionId
+          required: true
+          description: ID of the transaction to update the note for
+          type: string
+        - in: body
+          name: body
+          description: Updated note payload
+          required: true
+          schema:
+            $ref: "#/definitions/NoteBody"
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: Note updated successfully
+        "400":
+          description: Invalid request payload
+        "404":
+          description: Transaction not found
+        "500":
+          description: Internal Server Error
+    delete:
+      security:
+        - Bearer: []
+      tags:
+        - Transactions Module
+      summary: Delete Note of Transaction
+      description: API to delete the note of a specific transaction
+      parameters:
+        - in: path
+          name: transactionId
+          required: true
+          description: ID of the transaction to delete the note from
+          type: string
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: Note deleted successfully
+        "404":
+          description: Transaction not found
+        "500":
+          description: Internal Server Error
 securityDefinitions:
   Bearer:
     type: apiKey
@@ -401,12 +464,15 @@ definitions:
         type: string
         format: date
         description: Date of transaction
-      account_type:
+      transaction_type:
         type: string
-        description: Type of account
-      account_number:
+        description: Type of the transaction
+      transaction_category:
         type: string
-        description: Account number
+        description: category of the transaction
+      transaction_note:
+        type: string
+        description: Note of the transaction
       description:
         type: string
         description: Transaction description
@@ -419,54 +485,16 @@ definitions:
       currency:
         type: string
         description: Transaction currency
-  transaction_category:
-    type: object
-    properties:
-      account_ID:
-        type: string
-        description: Account ID of the transaction
-      transaction_ID:
-        type: number
-        description: ID of the transaction
-      transaction type:
-        type: string
-        enum: [Saving, Subscription, Services, Education, Hobbies, Health, Transportation, Accommodation, Food]
-        description: Category of the transaction
-  transaction_categoryResponse:
-    type: object
-    properties:
-      account_ID:
-        type: string
-        description: Account ID of the transaction
-      transaction_ID:
-        type: number
-        description: ID of the transaction
-      transaction type:
-        type: string
-        description: Category of the transaction
-  transaction_note:
-    type: object
-    properties:
-      account_ID:
-        type: string
-        description: Account ID of the transaction
-      transaction_ID:
-        type: number
-        description: ID of the transaction
-      note:
-        type: string
-        description: Note of the transaction
-  transaction_noteResponse:
-    type: object
-    properties:
-      account_ID:
-        type: string
-        description: Account ID of the transaction
-      transaction_ID:
-        type: number
-        description: ID of the transaction
-      note:
-        type: string
-        description: Note of the transaction
-
+category:
+  type: object
+  properties:
+    note:
+      type: string
+  description: The category to be added or updated
+NoteBody:
+  type: object
+  properties:
+    note:
+      type: string
+  description: The note to be added or updated
   
