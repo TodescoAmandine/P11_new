@@ -169,6 +169,11 @@ paths:
       summary: Add category to Transaction
       description: API to add a category to a specific transaction
       parameters:
+        # - in: path
+        #   name: accountId
+        #   required: true
+        #   description: ID of the account containing the transaction
+        #   type: string
         - in: path
           name: transactionId
           required: true
@@ -176,10 +181,10 @@ paths:
           type: string
         - in: body
           name: body
-          description: category payload
+          description: Category payload
           required: true
           schema:
-            $ref: "#/definitions/category"
+            $ref: "#/definitions/CategoryPayload"
       produces:
         - application/json
       responses:
@@ -199,6 +204,11 @@ paths:
       summary: Update category of Transaction
       description: API to update the category of a specific transaction
       parameters:
+        # - in: path
+        #   name: accountId
+        #   required: true
+        #   description: ID of the account containing the transaction
+        #   type: string
         - in: path
           name: transactionId
           required: true
@@ -206,10 +216,10 @@ paths:
           type: string
         - in: body
           name: body
-          description: Updated category payload
+          description: Updated Category payload
           required: true
           schema:
-            $ref: "#/definitions/category"
+            $ref: "#/definitions/CategoryPayload"
       produces:
         - application/json
       responses:
@@ -229,6 +239,11 @@ paths:
       summary: Delete category of Transaction
       description: API to delete the category of a specific transaction
       parameters:
+        # - in: path
+        #   name: accountId
+        #   required: true
+        #   description: ID of the account containing the transaction
+        #   type: string
         - in: path
           name: transactionId
           required: true
@@ -252,6 +267,11 @@ paths:
       summary: Add Note to Transaction
       description: API to add a note to a specific transaction
       parameters:
+        # - in: path
+        #   name: accountId
+        #   required: true
+        #   description: ID of the account containing the transaction
+        #   type: string
         - in: path
           name: transactionId
           required: true
@@ -262,7 +282,7 @@ paths:
           description: Note payload
           required: true
           schema:
-            $ref: "#/definitions/NoteBody"
+            $ref: "#/definitions/NotePayload"
       produces:
         - application/json
       responses:
@@ -282,6 +302,11 @@ paths:
       summary: Update Note of Transaction
       description: API to update the note of a specific transaction
       parameters:
+        # - in: path
+        #   name: accountId
+        #   required: true
+        #   description: ID of the account containing the transaction
+        #   type: string
         - in: path
           name: transactionId
           required: true
@@ -292,7 +317,7 @@ paths:
           description: Updated note payload
           required: true
           schema:
-            $ref: "#/definitions/NoteBody"
+            $ref: "#/definitions/NotePayload"
       produces:
         - application/json
       responses:
@@ -312,6 +337,11 @@ paths:
       summary: Delete Note of Transaction
       description: API to delete the note of a specific transaction
       parameters:
+        # - in: path
+        #   name: accountId
+        #   required: true
+        #   description: ID of the account containing the transaction
+        #   type: string
         - in: path
           name: transactionId
           required: true
@@ -457,44 +487,22 @@ definitions:
   transaction_IDResponse:
     type: object
     properties:
-      account_ID:
+      note:
         type: string
-        description: ID of account
-      date:
+        description: transaction note
+      category:
         type: string
-        format: date
-        description: Date of transaction
-      transaction_type:
+        description: transaction category
+  CategoryPayload:
+   type: object
+   properties:
+      note:
+       type: string
+       description: The category to be added or updated
+  NotePayload:
+   type: object
+   properties:
+      note:
         type: string
-        description: Type of the transaction
-      transaction_category:
-        type: string
-        description: category of the transaction
-      transaction_note:
-        type: string
-        description: Note of the transaction
-      description:
-        type: string
-        description: Transaction description
-      amount:
-        type: number
-        description: Transaction amount
-      balance:
-        type: number
-        description: Account balance after transaction
-      currency:
-        type: string
-        description: Transaction currency
-category:
-  type: object
-  properties:
-    note:
-      type: string
-  description: The category to be added or updated
-NoteBody:
-  type: object
-  properties:
-    note:
-      type: string
-  description: The note to be added or updated
+        description: The note to be added or updated
   
