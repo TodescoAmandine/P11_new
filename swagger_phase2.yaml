@@ -411,24 +411,6 @@ definitions:
     properties:
       userName:
         type: string
-  transaction_month:
-    type: object
-    properties:
-      account_ID:
-        type: string
-        description: Type of account
-      month_ID:
-        type: string
-        description: ID of the month
-      account_type:
-        type: string
-        description: Type of account
-      amount:
-        type: number
-        description: Transaction amount
-      currency:
-        type: string
-        description: Transaction amount
   transaction_monthResponse:
     type: object
     properties:
@@ -448,42 +430,6 @@ definitions:
       currency:
         type: string
         description: Transaction currency
-  transaction_ID:
-    type: object
-    properties:
-      account_ID:
-        type: string
-        description: ID of account
-      month_ID:
-        type: string
-        description: ID of the month
-      account_type:
-        type: string
-        description: Type of account
-      account_number:
-        type: string
-        description: Account number
-      description:
-        type: string
-        description: Transaction description
-      transaction type:
-        type: string
-        description: Transaction description
-      category:
-        type: string
-        description: Transaction description
-      note:
-        type: string
-        description: Transaction description
-      amount:
-        type: number
-        description: Transaction amount
-      balance:
-        type: number
-        description: Account balance after transaction
-      currency:
-        type: string
-        description: Transaction currency
   transaction_IDResponse:
     type: object
     properties:
@@ -496,7 +442,7 @@ definitions:
   CategoryPayload:
    type: object
    properties:
-      note:
+      category:
        type: string
        description: The category to be added or updated
   NotePayload:
