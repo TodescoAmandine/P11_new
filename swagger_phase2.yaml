@@ -169,11 +169,6 @@ paths:
       summary: Add category to Transaction
       description: API to add a category to a specific transaction
       parameters:
-        # - in: path
-        #   name: accountId
-        #   required: true
-        #   description: ID of the account containing the transaction
-        #   type: string
         - in: path
           name: transactionId
           required: true
@@ -204,11 +199,6 @@ paths:
       summary: Update category of Transaction
       description: API to update the category of a specific transaction
       parameters:
-        # - in: path
-        #   name: accountId
-        #   required: true
-        #   description: ID of the account containing the transaction
-        #   type: string
         - in: path
           name: transactionId
           required: true
@@ -239,11 +229,6 @@ paths:
       summary: Delete category of Transaction
       description: API to delete the category of a specific transaction
       parameters:
-        # - in: path
-        #   name: accountId
-        #   required: true
-        #   description: ID of the account containing the transaction
-        #   type: string
         - in: path
           name: transactionId
           required: true
@@ -267,11 +252,6 @@ paths:
       summary: Add Note to Transaction
       description: API to add a note to a specific transaction
       parameters:
-        # - in: path
-        #   name: accountId
-        #   required: true
-        #   description: ID of the account containing the transaction
-        #   type: string
         - in: path
           name: transactionId
           required: true
@@ -302,11 +282,6 @@ paths:
       summary: Update Note of Transaction
       description: API to update the note of a specific transaction
       parameters:
-        # - in: path
-        #   name: accountId
-        #   required: true
-        #   description: ID of the account containing the transaction
-        #   type: string
         - in: path
           name: transactionId
           required: true
@@ -337,11 +312,6 @@ paths:
       summary: Delete Note of Transaction
       description: API to delete the note of a specific transaction
       parameters:
-        # - in: path
-        #   name: accountId
-        #   required: true
-        #   description: ID of the account containing the transaction
-        #   type: string
         - in: path
           name: transactionId
           required: true
@@ -433,6 +403,19 @@ definitions:
   transaction_IDResponse:
     type: object
     properties:
+      date:
+        type: string
+      amount:
+        type: number
+      balance:
+        type: number
+      description:
+        type: string
+      currency: 
+        type: string
+      transactionType:
+        type: string
+        description: transaction note
       note:
         type: string
         description: transaction note
